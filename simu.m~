@@ -26,7 +26,7 @@ R.z = @zRef;
 initState = [P.z_s_0, 0, P.z_u_0, 0];                  
 
                                 % gains
-g = 1;
+g = 3;
 g1 = g;
 g2 = g;
 g3 = g;
