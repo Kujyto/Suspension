@@ -22,6 +22,9 @@ function u = command(t, state, P, R, G)
 
   delta = (dot_z_s - dot_z_u)^2;
   filter = delta > P.eps;
-  u = filter .* ( T_v - T_s + T_t - F_f - T_r);
-%   u=1;
+%   u = filter .* ( -T_v - T_s + T_t - F_f + T_r);
+
+  u = ( -T_v + T_r - T_s + T_t - F_f);
+  
+%    u=(dot_z_s-dot_z_u); % command constant
 end

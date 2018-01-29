@@ -17,7 +17,7 @@ P.gamma_f = 20;
 P.z_u_0 = 0;
 P.z_s_0 = 0;
 P.J = 1; % jerk max
-P.eps = 1e-1;
+P.eps = 1e-3;
 
                                 % référence
 R.z = @zRef;
@@ -26,7 +26,7 @@ R.z = @zRef;
 initState = [P.z_s_0, 0, P.z_u_0, 0];                  
 
                                 % gains
-g = 1;
+g = 15;
 g1 = g;
 g2 = g;
 g3 = g;
@@ -37,7 +37,7 @@ G.lambda_2 = g1 * g2 + g3 * g4 + (g1 + g2) * (g3 + g4);
 G.lambda_3 = g1 + g2 + g3 + g4;
 
                                 % options
-options = odeset();%'RelTol', 1e-3, 'AbsTol', 1e-5);
+options = odeset('RelTol', 1e-3, 'AbsTol', 1e-5);
 
 [t,state] = ode23tb(@dynamic, [0,40], initState, options, P, R, G);
 
