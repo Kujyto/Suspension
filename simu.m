@@ -19,6 +19,9 @@ P.z_s_0 = 0;
 P.J = 1; % jerk max
 P.eps = 1e-3;
 
+P.st = 1; % raideur de z_r
+P.h = 0.2; % hauteur de z_r
+
                                 % référence
 R.z = @zRef;
 
@@ -43,13 +46,17 @@ options = odeset('RelTol', 1e-3, 'AbsTol', 1e-5);
 
 subplot(4,1,1);
 plot(t,state(:,1));
+legend("z_s");
 subplot(4,1,2);
 plot(t,state(:,3));
+legend("z_u");
 subplot(4,1,3);
 plot(t,(P.m_u.*state(:,3) + P.m_s.*state(:,1)) / (P.m_u + P.m_s));
+legend("S_p");
 subplot(4,1,4);
-z = R.z(t);
+z = R.z(t,P);
 plot(t,z.v);
+legend("z_r");
 
 % %% DEBUG zRef
 % t = [0:0.01:50];

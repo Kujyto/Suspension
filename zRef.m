@@ -1,8 +1,8 @@
-function z = zRef(t)
+function z = zRef(t, P)
   t0 = 20;
   delta = 1;
-  st = 1;
-  h = 0.2;
+  st = P.st;
+  h = P.h;
 
 %   z1 = tanhTr(t,st,0,h,t0-delta,'');
 %   z2 = tanhTr(t,st,h,0,t0+delta,'');

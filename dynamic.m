@@ -6,7 +6,7 @@ function eq = dynamic(t, state, P, R, G)
 
   F_f = P.C_f .* tanh(P.gamma_f .* dot_z_s);
 
-  z = R.z(t);
+  z = R.z(t,P);
   z_r = z.v;
 
   %% z_s'

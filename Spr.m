@@ -1,7 +1,7 @@
 function z = Spr(t, state, P, R)
     [z_s, dot_z_s, z_u, dot_z_u] = extractState(state);
 
-    z_r = R.z(t);
+    z_r = R.z(t,P);
     
     
     z.v = (P.m_u + P.m_s) .* z_r.v;
@@ -10,4 +10,24 @@ function z = Spr(t, state, P, R)
     z.d3 = (P.m_u + P.m_s) .* z_r.d3;
     z.d4 = (P.m_u + P.m_s) .* z_r.d4;
     z.d5 = (P.m_u + P.m_s) .* z_r.d5;
+
+end
+
+function b = beta(x,n)
+    b = 0;
+    for k = 0:(n+1)
+       b = b + (-1)^k * nchoosek(n+1,k) * pos(x - k + (n+1)/2,n); 
+    end
+end
+
+function y = pos(x,n)
+    if x < 0
+        y = 0;
+    elseif (x == 0) && (n == 0)
+        y = 1/2;
+    elseif x > 0 && n == 0
+        y = 1;
+    else
+        y = x^n;
+    end
 end

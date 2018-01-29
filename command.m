@@ -1,7 +1,7 @@
 function u = command(t, state, P, R, G)
   [z_s, dot_z_s, z_u, dot_z_u] = extractState(state);
 
-  z = R.z(t);
+  z = R.z(t,P);
   z_r = z.v;
   dot_z_r = z.d1;
   dot_dot_z_r = z.d2;
