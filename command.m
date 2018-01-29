@@ -7,13 +7,13 @@ function u = command(t, state, P, R, G)
   dot_dot_z_r = z.d2;
 
   sp_r = Spr(t,state,P,R);
-  
+
   e_0 = P.m_u .* z_u + P.m_s .* z_s - sp_r.v;
   e_1 = P.m_u .* dot_z_u + P.m_s .* dot_z_s - sp_r.d1;
   e_2 = - P.k_t .* (z_u - z_r) - sp_r.d2;
   e_3 = - P.k_t .* (dot_z_u - dot_z_r) - sp_r.d3;
-  v = sp_r.d4 + G.lambda_0 .* e_0 + G.lambda_1 .* e_1 + G.lambda_2 .* e_2 + G.lambda_3 .* e_3;
-  
+  v = sp_r.d4 - G.lambda_0 .* e_0 - G.lambda_1 .* e_1 - G.lambda_2 .* e_2 - G.lambda_3 .* e_3;
+
   T_v = P.m_u .* v ./ P.k_t;
   T_s = P.k_s .* (z_s-z_u);
   T_t = P.k_t .* (z_u-z_r);
@@ -22,6 +22,6 @@ function u = command(t, state, P, R, G)
 
   delta = (dot_z_s - dot_z_u)^2;
   filter = delta > P.eps;
-  u = filter .* ( - T_v - T_s + T_t - F_f + T_r);
+  u = filter .* ( T_v - T_s + T_t - F_f - T_r);
 %   u=1;
 end

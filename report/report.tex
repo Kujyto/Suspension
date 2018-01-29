@@ -1,0 +1,78 @@
+\documentclass[10pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Système}
+
+\[
+\left\{
+\begin{array}{r c l}
+  m_s \ddot{z_s} + u \left( \dot{z_s} - \dot{z_u} \right) + k_s \left( z_s - z_u \right) & = & - F_f \\
+  m_u \ddot{z_u} - u \left( \dot{z_s} - \dot{z_u} \right) - k_s \left( z_s - z_u \right) + k_t \left( z_u - z_r \right) & = & F_f \\
+  F_f & = & C_f \tanh\left(\gamma_f \dot{z_s} \right) \\
+\end{array}
+\right.
+\]
+
+\section{Sortie plate}
+\[
+S_p = m_u z_u + m_s z_s
+\]
+
+\[
+S_p^{(1)} = m_u \dot{z_u} + m_s \dot{z_s}
+\]
+
+\[
+\begin{array}{r c l}
+  S_p^{(2)} &=& m_u \ddot{z_u} + m_s \ddot{z_s} \\
+  &=& - k_t \left( z_u - z_r \right) \\
+\end{array}
+\]
+
+\[
+S_p^{(3)} = - k_t \left( \dot{z_u} - \dot{z_r} \right)
+\]
+
+\[
+\begin{array}{r c l}
+  S_p^{(4)} &=& k_t \ddot{z_r} - k_t \ddot{z_u} \\
+  &=& k_t \ddot{z_r} + \dfrac{k_t}{m_u} \left[ u \left( \dot{z_s} - \dot{z_u} \right) + k_s \left( z_s - z_u \right) - k_t \left( z_u - z_r \right) + F_f \right] \\
+\end{array}
+\]
+
+\subsection{Linéarisation}
+
+\[
+\left\{
+\begin{array}{r c l}
+S_p^{(4)} &=& v \\
+v &=& S_{pr}^{(4)} - \lambda_0 e_{sp} - \lambda_1 e_{sp}^{(1)} - \lambda_2 e_{sp}^{(2)} - \lambda_3 e_{sp}^{(3)} \\
+\end{array}
+\right.
+\]
+
+\[
+\begin{array}{r c l}
+  e_{sp} &=& m_u z_u + m_s z_s - S_{pr} \\
+  \\
+  e_{sp}^{(1)} &=& m_u \dot{z_u} + m_s \dot{z_s} - S_{pr}^{(1)} \\
+  \\
+  e_{sp}^{(2)} &=& k_t z_r - k_t z_u - S_{pr}^{(2)} \\
+  \\
+  e_{sp}^{(3)} &=& k_t \dot{z_r} - k_t \dot{z_u} - S_{pr}^{(3)} \\
+\end{array}
+\]
+
+On obtient la commande :
+\[
+u \left( \dot{z_s} - \dot{z_u} \right) = \dfrac{m_u}{k_t} v - m_u \ddot{z_r} - k_s \left( z_s - z_u \right) + k_t \left( z_u - z_r \right) - F_f
+\]
+
+\end{document}
