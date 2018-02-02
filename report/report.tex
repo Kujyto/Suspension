@@ -61,8 +61,8 @@ z_s = \dfrac{1}{m_s} S_p - \dfrac{m_u}{m_s} z_r + \dfrac{m_u}{k_t m_s} Sp^{(2)}
 \[
 \left\{
 \begin{array}{r c l}
-S_p^{(4)} &=& v \\
-v &=& S_{pr}^{(4)} - \lambda_0 e_{sp} - \lambda_1 e_{sp}^{(1)} - \lambda_2 e_{sp}^{(2)} - \lambda_3 e_{sp}^{(3)} \\
+  S_p^{(4)} &=& v \\
+  v &=& S_{pr}^{(4)} - \lambda_0 e_{sp} - \lambda_1 e_{sp}^{(1)} - \lambda_2 e_{sp}^{(2)} - \lambda_3 e_{sp}^{(3)} \\
 \end{array}
 \right.
 \]
@@ -82,6 +82,36 @@ v &=& S_{pr}^{(4)} - \lambda_0 e_{sp} - \lambda_1 e_{sp}^{(1)} - \lambda_2 e_{sp
 On obtient la commande :
 \[
 u \left( \dot{z_s} - \dot{z_u} \right) = \dfrac{m_u}{k_t} v - m_u \ddot{z_r} - k_s \left( z_s - z_u \right) + k_t \left( z_u - z_r \right) - F_f
+\]
+
+\section{Limiter le jerk}
+
+Fixons
+\[
+S_{pr}(t) = \alpha \tanh(\gamma t)
+\]
+On a alors
+\[
+\begin{array}{r c l l l}
+  S_{pr} && &\in&\left[ -\alpha, \alpha \right] \\
+  \\
+  S_{pr}^{(1)} &=& \alpha \gamma - \dfrac{\gamma}{\alpha} S_{pr}^2 &\in& \left[0, \alpha \gamma \right] \\
+  \\
+  S_{pr}^{(2)} &=& -2 \dfrac{\gamma}{\alpha} S_{pr} S_{pr}^{(1)} &\in& \left[ -2 \alpha \gamma^{2}, 2 \alpha \gamma^{2} \right] \\
+  \\
+  S_{pr}^{(3)} &=& -2 \dfrac{\gamma}{\alpha} \left[ \left( S_{pr}^{(1)} \right)^2 + S_{pr} S_{pr}^{(2)} \right] &\in& \left[ -6 \alpha \gamma^{3}, 4 \alpha \gamma^{3} \right] \\
+  \\
+  S_{pr}^{(4)} &=& -2 \dfrac{\gamma}{\alpha} \left[ 3 S_{pr}^{(1)} S_{pr}^{(2)} + S_{pr} S_{pr}^{(3)} \right] &\in& \left[ -20 \alpha \gamma^4, 24 \alpha \gamma^4 \right] \\
+  \\
+  S_{pr}^{(5)} &=& -2 \dfrac{\gamma}{\alpha} \left[ 3 \left( S_{pr}^{(2)} \right)^{2} + 4 S_{pr}^{(1)} S_{pr}^{(3)} + S_{pr} S_{pr}^{(4)} \right] &\in& \\
+\end{array}
+\]
+
+On peut alors surapproximer le jerk du chassis :
+\[
+\begin{array}{r c l}
+  \left| z_s^{(3)} \right| &\leq& \\
+\end{array}
 \]
 
 \end{document}
