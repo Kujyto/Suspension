@@ -53,7 +53,7 @@ z_u = z_r - \dfrac{1}{k_t} S_p^{(2)}
 \]
 et
 \[
-z_s = \dfrac{1}{m_s} S_p - \dfrac{m_u}{m_s} z_r + \dfrac{m_u}{k_t m_s} Sp^{(2)}
+z_s = \dfrac{1}{m_s} S_p - \dfrac{m_u}{m_s} z_r + \dfrac{m_u}{k_t m_s} S_p^{(2)}
 \]
 
 \subsection{Linéarisation}
@@ -86,32 +86,48 @@ u \left( \dot{z_s} - \dot{z_u} \right) = \dfrac{m_u}{k_t} v - m_u \ddot{z_r} - k
 
 \section{Limiter le jerk}
 
+Soit la référence
+\[
+z_{r}(t) = \alpha_z \left( 1 + \tanh(\gamma_z t) \right)
+\]
+
 Fixons
 \[
-S_{pr}(t) = \alpha \tanh(\gamma t)
+S_{pr}(t) = \alpha \left( 1 + \tanh(\gamma t) \right)
 \]
 On a alors
 \[
 \begin{array}{r c l l l}
-  S_{pr} && &\in&\left[ -\alpha, \alpha \right] \\
+  S_{pr} && &\in&\left[ 0, 2\alpha \right] \\
   \\
-  S_{pr}^{(1)} &=& \alpha \gamma - \dfrac{\gamma}{\alpha} S_{pr}^2 &\in& \left[0, \alpha \gamma \right] \\
+  S_{pr}^{(1)} &=& \alpha \gamma (1 - \tanh^2(\gamma t)) &\in& \left[ 0, \alpha \gamma \right] \\
   \\
-  S_{pr}^{(2)} &=& -2 \dfrac{\gamma}{\alpha} S_{pr} S_{pr}^{(1)} &\in& \left[ -2 \alpha \gamma^{2}, 2 \alpha \gamma^{2} \right] \\
+  S_{pr}^{(2)} &=& -2 \gamma \tanh(\gamma t) S_{pr}^{(1)} &\in& \left[ -2 \alpha \gamma^2, 2 \alpha \gamma^2 \right] \\
   \\
-  S_{pr}^{(3)} &=& -2 \dfrac{\gamma}{\alpha} \left[ \left( S_{pr}^{(1)} \right)^2 + S_{pr} S_{pr}^{(2)} \right] &\in& \left[ -6 \alpha \gamma^{3}, 4 \alpha \gamma^{3} \right] \\
+  S_{pr}^{(3)} &=& -2 \gamma \left[ \dfrac{1}{\alpha} \left( S_{pr}^{(1)} \right)^2 + \tanh(\gamma t) S_{pr}^{(2)} \right] &\in& \left[ -6 \alpha \gamma^3, 4 \alpha \gamma^3 \right] \\
   \\
-  S_{pr}^{(4)} &=& -2 \dfrac{\gamma}{\alpha} \left[ 3 S_{pr}^{(1)} S_{pr}^{(2)} + S_{pr} S_{pr}^{(3)} \right] &\in& \left[ -20 \alpha \gamma^4, 24 \alpha \gamma^4 \right] \\
+  S_{pr}^{(4)} &=& -2 \gamma \left[ \dfrac{3}{\alpha} S_{pr}^{(1)} S_{pr}^{(2)} + \tanh(\gamma t) S_{pr}^{(3)} \right] &\in& \left[ -24 \alpha \gamma^4, 24 \alpha \gamma^4 \right] \\
   \\
-  S_{pr}^{(5)} &=& -2 \dfrac{\gamma}{\alpha} \left[ 3 \left( S_{pr}^{(2)} \right)^{2} + 4 S_{pr}^{(1)} S_{pr}^{(3)} + S_{pr} S_{pr}^{(4)} \right] &\in& \\
+  S_{pr}^{(5)} &=& -2 \gamma \left[ \dfrac{3}{\alpha} \left( S_{pr}^{(2)} \right)^2 + \dfrac{4}{\alpha} S_{pr}^{(1)} S_{pr}^{(3)} + \tanh(\gamma t) S_{pr}^{(4)} \right] &\in& \left[ -104 \alpha \gamma^5, 96 \alpha \gamma^5 \right] \\
 \end{array}
 \]
 
-On peut alors surapproximer le jerk du chassis :
+On peut alors encadrer le jerk de référence du chassis :
 \[
 \begin{array}{r c l}
-  \left| z_s^{(3)} \right| &\leq& \\
+  z_{sr}^{(3)} &=& \dfrac{1}{m_s} S_{pr}^{(3)} - \dfrac{m_u}{m_s} z_r^{(3)} + \dfrac{m_u}{k_t m_s} S_{pr}^{(5)} \\
+  &\in& \left[ - \left( \dfrac{6}{m_s} \alpha \gamma^3 + \dfrac{104 m_u}{k_t m_s} \alpha \gamma^5 + \dfrac{4 m_u}{m_s} \alpha_z \gamma_z^3 \right), \dfrac{4}{m_s} \alpha \gamma^3 + \dfrac{96 m_u}{k_t m_s} \alpha \gamma^5 + \dfrac{6 m_u}{m_s} \alpha_z \gamma_z^3\right] \\
 \end{array}
 \]
+
+Malheureusement, la surapproximation du jerk est trop importante et nécessiterait un coefficient de raideur négatif, ce qui n'est pas physiquement possible et va en contradiction avec les hypothèses sur les calculs ($\alpha$ et $\gamma$ positifs).
+
+\section{Simulation MATLAB}
+
+La simulation est réalisée avec le solver ``ode23tb'' avec une route $z_r$ sous forme de tangente hyperbolique entre $0$ et $0.2$ (marche de 20cm de haut).
+
+La loi de commande regroupe l'ensemble du terme $u \left( \dot{z_s} - \dot{z_u} \right)$ mais est fixé à $0$ lorsque $\left| \dot{z_s} - \dot{z_u} \right| < \epsilon$ avec $\epsilon = 10^{-3}$.
+
+La sortie plate de référence est de la même forme que $z_r$ mais avec une raideur plus faible (ou égale) pour réduire le jerk subit par le chassis.
 
 \end{document}
