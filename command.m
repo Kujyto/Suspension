@@ -21,10 +21,15 @@ F_f = P.C_f .* tanh(P.gamma_f .* dot_z_s);
 T_r = P.m_u .* dot_dot_z_r;
 
 delta = (dot_z_s - dot_z_u).^2;
+% u = ( -T_v - T_s + T_t - F_f + T_r);
+
 filter = delta > P.eps;
-u = ( -T_v - T_s + T_t - F_f + T_r);
+filterPos = (dot_z_s - dot_z_u) > 0;
+filterNeg = 1-filterPos;
+filterEps = filterPos - filterNeg;
 
-%   u = filter .* ( -T_v + T_r - T_s + T_t - F_f);
+% u = ( -T_v + T_r - T_s + T_t - F_f) ./ (filter .* (dot_z_s - dot_z_u) + (1-filter) .* (filterEps .* P.eps));
+u = filter .* ( -T_v + T_r - T_s + T_t - F_f);
 
-%    u=(dot_z_s-dot_z_u); % command constant
+% u=(dot_z_s-dot_z_u); % command constant
 end

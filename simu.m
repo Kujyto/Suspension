@@ -19,12 +19,12 @@ P.z_s_0 = 0;
 P.J = 1; % jerk max
 P.eps = 1e-3;
 
-P.st = 4; % raideur de z_r
+P.st = 1.75; % raideur de z_r
 P.h = 0.2; % hauteur de z_r
 P.t0 = 20;
 
 P.st_precision = 0.1; % precision sur la raideur de la sortie plate
-P.st_min = 1;
+P.st_min = 0.25;
 P.stSp = stiffness(P);
 P.t0Sp = P.t0;
 
@@ -37,7 +37,7 @@ R.z = @zRef;
 initState = [P.z_s_0, 0, P.z_u_0, 0];
 
 % gains
-g = 15;
+g = 30;
 g1 = g;
 g2 = g;
 g3 = g;
